@@ -18,7 +18,7 @@ GuestPulse helps homestay operators analyze guest reviews from platforms such as
 
 ### Database
 
-* MongoDB Atlas₹
+* MongoDB Atlas
 
 ### AI Integration
 
