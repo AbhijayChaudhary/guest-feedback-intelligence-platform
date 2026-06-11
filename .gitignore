@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# React / Node
+node_modules/
+.next/
+dist/
+
+# OS Files
+.DS_Store
