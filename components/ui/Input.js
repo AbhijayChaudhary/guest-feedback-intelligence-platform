@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 /**
@@ -31,27 +33,28 @@ const Input = ({
       {label && (
         <label
           htmlFor={inputId}
-          className="text-sm font-medium text-gray-700 select-none"
+          className="text-sm font-medium text-gray-700 dark:text-gray-300 select-none"
         >
           {label}
         </label>
       )}
-
+      
       <input
         id={inputId}
         type={type}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`px-3 py-2 bg-white text-gray-900 border rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-1 placeholder:text-gray-400 ${error
-            ? 'border-red-500 focus:ring-red-200'
-            : 'border-gray-300 focus:ring-blue-100 focus:border-blue-500 hover:border-gray-400'
-          }`}
+        className={`px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border rounded-lg text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-1 dark:focus:ring-offset-gray-900 placeholder:text-gray-400 dark:placeholder:text-gray-500 ${
+          error
+            ? 'border-red-500 focus:ring-red-200 dark:focus:ring-red-900/30'
+            : 'border-gray-300 dark:border-gray-700 focus:ring-blue-100 dark:focus:ring-blue-900/30 focus:border-blue-500 dark:focus:border-blue-400 hover:border-gray-400 dark:hover:border-gray-600'
+        }`}
         {...props}
       />
 
       {error && (
-        <p className="text-xs text-red-500 font-medium mt-0.5">
+        <p className="text-xs text-red-500 dark:text-red-400 font-medium mt-0.5">
           {error}
         </p>
       )}

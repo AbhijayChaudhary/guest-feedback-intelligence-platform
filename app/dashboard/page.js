@@ -1,3 +1,7 @@
+'use client';
+
+import { Button } from '@/components/ui';
+
 export default function DashboardPage() {
   const stats = [
     { label: 'Total Reviews', value: '1,250', change: '+12% from last month', icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2' },
@@ -21,33 +25,33 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="pt-24 pb-12 bg-gray-50 min-h-screen font-geist-sans">
+    <div className="pt-24 pb-12 bg-gray-50 dark:bg-gray-900 min-h-screen font-geist-sans transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex justify-between items-end">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Performance Dashboard</h1>
-            <p className="text-gray-600">Track key guest satisfaction metrics over time.</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Performance Dashboard</h1>
+            <p className="text-gray-600 dark:text-gray-400">Track key guest satisfaction metrics over time.</p>
           </div>
           <div className="flex space-x-2">
-            <button className="px-3 py-1.5 bg-white border border-gray-200 text-xs font-medium rounded-md text-gray-700 hover:bg-gray-50 transition-colors">Last 30 Days</button>
-            <button className="px-3 py-1.5 bg-blue-600 border border-blue-700 text-xs font-medium rounded-md text-white hover:bg-blue-700 transition-colors">Export Report</button>
+            <Button variant="secondary" size="sm">Last 30 Days</Button>
+            <Button variant="primary" size="sm">Export Report</Button>
           </div>
         </div>
 
         {/* Highlight Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, i) => (
-            <div key={i} className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+            <div key={i} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-sm transition-colors duration-300">
               <div className="flex justify-between items-start mb-2">
-                <p className="text-xs font-medium text-gray-500">{stat.label}</p>
-                <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{stat.label}</p>
+                <svg className="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={stat.icon} />
                 </svg>
               </div>
               <div className="flex items-baseline space-x-2">
-                <span className="text-2xl font-bold text-gray-900">{stat.value}</span>
+                <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{stat.value}</span>
               </div>
-              <p className={`text-[10px] mt-1 font-medium ${stat.change.includes('+') ? 'text-green-600' : 'text-gray-400'}`}>
+              <p className={`text-[10px] mt-1 font-medium ${stat.change.includes('+') ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-gray-500'}`}>
                 {stat.change}
               </p>
             </div>
@@ -57,23 +61,23 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Sentiment Trend */}
           <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm transition-colors duration-300">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-sm font-semibold text-gray-900">Sentiment Trend</h2>
-                <div className="flex space-x-4 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Sentiment Trend</h2>
+                <div className="flex space-x-4 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
                   <div className="flex items-center gap-1.5"><div className="w-2 h-2 bg-blue-600 rounded-full"></div> Positive</div>
-                  <div className="flex items-center gap-1.5"><div className="w-2 h-2 bg-gray-200 rounded-full"></div> Negative</div>
+                  <div className="flex items-center gap-1.5"><div className="w-2 h-2 bg-gray-200 dark:bg-gray-700 rounded-full"></div> Negative</div>
                 </div>
               </div>
               <div className="h-48 flex items-end gap-3 px-2">
                 {[60, 45, 75, 40, 90, 65, 80, 55, 70, 85, 40, 75].map((h, i) => (
                   <div key={i} className="flex-grow flex flex-col gap-1 items-center group">
                     <div className="w-full bg-blue-600 rounded-sm opacity-80 group-hover:opacity-100 transition-opacity" style={{ height: `${h}%` }}></div>
-                    <div className="w-full bg-gray-100 rounded-sm" style={{ height: `${20}%` }}></div>
+                    <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-sm" style={{ height: `${20}%` }}></div>
                   </div>
                 ))}
               </div>
-              <div className="flex justify-between mt-4 text-[10px] text-gray-400 font-medium px-1 uppercase letter-tight">
+              <div className="flex justify-between mt-4 text-[10px] text-gray-400 dark:text-gray-500 font-medium px-1 uppercase letter-tight">
                 <span>Week 1</span>
                 <span>Week 2</span>
                 <span>Week 3</span>
@@ -82,19 +86,19 @@ export default function DashboardPage() {
             </div>
 
             {/* Recent AI Insights */}
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-              <h2 className="text-sm font-semibold text-gray-900 mb-6">Recent AI Insights</h2>
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm transition-colors duration-300">
+              <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-6">Recent AI Insights</h2>
               <div className="space-y-4">
                 {insights.map((insight, i) => (
-                  <div key={i} className="flex gap-4 p-4 rounded-lg bg-gray-50 border border-gray-100">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${insight.type === 'positive' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                  <div key={i} className="flex gap-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-700">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${insight.type === 'positive' ? 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'}`}>
                       {insight.type === 'positive' ? (
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                       ) : (
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                       )}
                     </div>
-                    <p className="text-sm text-gray-700 font-medium">{insight.text}</p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 font-medium">{insight.text}</p>
                   </div>
                 ))}
               </div>
@@ -102,22 +106,22 @@ export default function DashboardPage() {
           </div>
 
           {/* Top Mentioned Themes */}
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col">
-            <h2 className="text-sm font-semibold text-gray-900 mb-6">Top Mentioned Themes</h2>
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm flex flex-col transition-colors duration-300">
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-6">Top Mentioned Themes</h2>
             <div className="space-y-6">
               {themes.map((theme, i) => (
                 <div key={i} className="space-y-2">
                   <div className="flex justify-between items-center text-xs">
-                    <span className="font-semibold text-gray-700">{theme.name}</span>
-                    <span className="text-gray-500 font-medium">{theme.score}%</span>
+                    <span className="font-semibold text-gray-700 dark:text-gray-300">{theme.name}</span>
+                    <span className="text-gray-500 dark:text-gray-400 font-medium">{theme.score}%</span>
                   </div>
-                  <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="w-full h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                     <div className="h-full bg-blue-600 rounded-full" style={{ width: `${theme.score}%` }}></div>
                   </div>
                 </div>
               ))}
             </div>
-            <div className="mt-auto pt-8 border-t border-gray-100 italic text-[11px] text-gray-400">
+            <div className="mt-auto pt-8 border-t border-gray-100 dark:border-gray-700 italic text-[11px] text-gray-400 dark:text-gray-500">
               * Themes are automatically extracted using NLP model v2.1
             </div>
           </div>

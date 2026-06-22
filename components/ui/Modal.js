@@ -45,29 +45,29 @@ const Modal = ({ isOpen, onClose, title, children }) => {
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-gray-900/40 backdrop-blur-[2px] transition-opacity"
+        className="absolute inset-0 bg-gray-900/40 dark:bg-black/60 backdrop-blur-[2px] transition-opacity"
         onClick={onClose}
       />
 
       {/* Modal Container */}
       <div 
-        className="relative bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200"
+        className="relative bg-white dark:bg-gray-900 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 border border-transparent dark:border-gray-800"
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
       >
         {/* Header */}
         {(title || onClose) && (
-          <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+          <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
             {title && (
-              <h3 id="modal-title" className="text-lg font-bold text-gray-900 leading-none">
+              <h3 id="modal-title" className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-none">
                 {title}
               </h3>
             )}
             <button
               ref={closeButtonRef}
               onClick={onClose}
-              className="p-1 px-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-blue-100 outline-none"
+              className="p-1 px-2 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 outline-none"
               aria-label="Close modal"
             >
               <span className="text-xl leading-none">&times;</span>
@@ -76,7 +76,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
         )}
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-6 text-gray-700 dark:text-gray-300">
           {children}
         </div>
       </div>

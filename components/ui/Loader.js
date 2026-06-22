@@ -17,7 +17,7 @@ const Loader = ({ size = 'md', className = '' }) => {
   return (
     <div className={`flex items-center justify-center ${className}`}>
       <div
-        className={`rounded-full border-gray-200 border-t-blue-600 animate-spin ${sizeStyles[size]}`}
+        className={`rounded-full border-gray-200 dark:border-gray-700 border-t-blue-600 animate-spin ${sizeStyles[size]}`}
         role="status"
         aria-label="Loading"
       >

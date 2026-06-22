@@ -23,21 +23,21 @@ export default function ComponentsDemoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-24 pb-20 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       <div className="max-w-4xl mx-auto space-y-12">
         
         {/* Page Header */}
-        <div className="border-b border-gray-200 pb-8 text-center sm:text-left">
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">GuestBook UI Component Showcase</h1>
-          <p className="text-gray-500 mt-2">Explore and test the reusable component library built for the GuestBook platform.</p>
+        <div className="border-b border-gray-200 dark:border-gray-800 pb-8 text-center sm:text-left">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">GuestBook UI Component Showcase</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">Explore and test the reusable component library built for the GuestBook platform.</p>
         </div>
 
         {/* Buttons Section */}
         <section className="space-y-6">
-          <h2 className="text-xl font-bold text-gray-900 border-l-4 border-blue-600 pl-4">Button Examples</h2>
-          <div className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm space-y-8">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 border-l-4 border-blue-600 dark:border-blue-500 pl-4">Button Examples</h2>
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm space-y-8 transition-colors duration-300">
             <div className="space-y-4">
-              <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Variants</p>
+              <p className="text-sm font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Variants</p>
               <div className="flex flex-wrap gap-4">
                 <Button variant="primary">Primary Button</Button>
                 <Button variant="secondary">Secondary Button</Button>
@@ -46,7 +46,7 @@ export default function ComponentsDemoPage() {
               </div>
             </div>
             <div className="space-y-4">
-              <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Sizes</p>
+              <p className="text-sm font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">Sizes</p>
               <div className="flex flex-wrap items-end gap-4">
                 <Button size="sm">Small</Button>
                 <Button size="md">Medium</Button>
@@ -58,8 +58,8 @@ export default function ComponentsDemoPage() {
 
         {/* Inputs Section */}
         <section className="space-y-6">
-          <h2 className="text-xl font-bold text-gray-900 border-l-4 border-blue-600 pl-4">Input Examples</h2>
-          <div className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-8">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 border-l-4 border-blue-600 dark:border-blue-500 pl-4">Input Examples</h2>
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-8 transition-colors duration-300">
             <Input 
               label="Full Name" 
               placeholder="e.g. John Doe" 
@@ -79,8 +79,8 @@ export default function ComponentsDemoPage() {
 
         {/* Modal Section */}
         <section className="space-y-6">
-          <h2 className="text-xl font-bold text-gray-900 border-l-4 border-blue-600 pl-4">Modal Example</h2>
-          <div className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 border-l-4 border-blue-600 dark:border-blue-500 pl-4">Modal Example</h2>
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-300">
             <Button onClick={() => setIsModalOpen(true)}>
               Open Demo Modal
             </Button>
@@ -91,12 +91,12 @@ export default function ComponentsDemoPage() {
               title="Review Summary Analysis"
             >
               <div className="space-y-4">
-                <p className="text-gray-600">
+                <p className="text-gray-600 dark:text-gray-400">
                   GuestBook AI has completed the analysis of the selected review. The sentiment is positive with high confidence.
                 </p>
-                <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
-                  <h4 className="text-sm font-bold text-blue-700 mb-1">Key Observation</h4>
-                  <p className="text-xs text-blue-600 leading-relaxed">
+                <div className="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg border border-blue-100 dark:border-blue-800 transition-colors duration-300">
+                  <h4 className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-1">Key Observation</h4>
+                  <p className="text-xs text-blue-600 dark:text-blue-400 leading-relaxed">
                     "Guests frequently praise the personalized breakfast service and the quick check-in process."
                   </p>
                 </div>
@@ -111,8 +111,8 @@ export default function ComponentsDemoPage() {
 
         {/* Toast Section */}
         <section className="space-y-6">
-          <h2 className="text-xl font-bold text-gray-900 border-l-4 border-blue-600 pl-4">Toast Notifications</h2>
-          <div className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm flex flex-wrap gap-4">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 border-l-4 border-blue-600 dark:border-blue-500 pl-4">Toast Notifications</h2>
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm flex flex-wrap gap-4 transition-colors duration-300">
             <Button variant="primary" onClick={() => showToast('Analysis completed successfully!', 'success')}>
               Show Success
             </Button>
@@ -134,19 +134,19 @@ export default function ComponentsDemoPage() {
 
         {/* Loader Section */}
         <section className="space-y-6 pb-12">
-          <h2 className="text-xl font-bold text-gray-900 border-l-4 border-blue-600 pl-4">Loader (Spinners)</h2>
-          <div className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-around">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 border-l-4 border-blue-600 dark:border-blue-500 pl-4">Loader (Spinners)</h2>
+          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-around transition-colors duration-300">
             <div className="text-center space-y-2">
               <Loader size="sm" />
-              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Small</p>
+              <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-widest">Small</p>
             </div>
             <div className="text-center space-y-2">
               <Loader size="md" />
-              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Medium</p>
+              <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-widest">Medium</p>
             </div>
             <div className="text-center space-y-2">
               <Loader size="lg" />
-              <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Large</p>
+              <p className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-widest">Large</p>
             </div>
           </div>
         </section>
