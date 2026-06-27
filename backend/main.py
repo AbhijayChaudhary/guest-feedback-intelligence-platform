@@ -3,6 +3,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
+# Import routers
+from routes import reviews_router
+
 # Load environment variables from .env if present
 load_dotenv()
 
@@ -29,6 +32,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Register routers
+app.include_router(reviews_router, prefix="/api")
 
 @app.get("/", tags=["Health"])
 async def read_root():
