@@ -1,6 +1,7 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 
 # Import routers
@@ -35,6 +36,15 @@ app.add_middleware(
 
 # Register routers
 app.include_router(reviews_router, prefix="/api")
+
+# Global Exception Handler
+# Catches all exceptions and always returns a standard 500 Internal Server Error response.
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal server error"}
+    )
 
 @app.get("/", tags=["Health"])
 async def read_root():
