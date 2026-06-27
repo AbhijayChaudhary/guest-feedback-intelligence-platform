@@ -270,3 +270,5 @@ dist/
 # OS Files
 .DS_Store
 
+#Postman
+GuestBook_API.postman_collection.json
