@@ -87,3 +87,23 @@ async def update_review(review_id: int, updated_review: Review):
         status_code=status.HTTP_404_NOT_FOUND,
         detail=f"Review with ID {review_id} not found"
     )
+
+@router.delete("/{review_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_review(review_id: int):
+    """
+    Delete a guest review by its ID.
+    Removes the review from the in-memory list.
+    Returns HTTP 204 No Content on success.
+    """
+    # Search for the review in our in-memory list
+    for idx, review in enumerate(SAMPLE_REVIEWS):
+        if review["id"] == review_id:
+            # Remove from list
+            SAMPLE_REVIEWS.pop(idx)
+            return
+            
+    # Raise a 404 error if the review to delete doesn't exist
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"Review with ID {review_id} not found"
+    )
