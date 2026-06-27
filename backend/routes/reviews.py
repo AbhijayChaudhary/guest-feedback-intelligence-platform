@@ -26,6 +26,35 @@ async def get_all_reviews():
     """
     return SAMPLE_REVIEWS
 
+@router.get("/search", response_model=List[Review], status_code=status.HTTP_200_OK)
+async def search_reviews(q: str):
+    """
+    Search reviews in the in-memory store by a query parameter 'q'.
+    Matches (case-insensitive) against guest_name, review, category, and sentiment.
+    """
+    results = []
+    
+    # Normalize query to lowercase to ensure case-insensitive matching
+    query_lower = q.lower()
+    
+    for review in SAMPLE_REVIEWS:
+        # Extract fields to perform search on (default to empty string if missing)
+        guest_name = review.get("guest_name", "").lower()
+        review_text = review.get("review", "").lower()
+        category = review.get("category", "").lower()
+        sentiment = review.get("sentiment", "").lower()
+        
+        # Check if the query matches as a substring in any of these fields
+        if (
+            query_lower in guest_name or
+            query_lower in review_text or
+            query_lower in category or
+            query_lower in sentiment
+        ):
+            results.append(review)
+            
+    return results
+
 @router.get("/{review_id}", response_model=Review, status_code=status.HTTP_200_OK)
 async def get_review_by_id(review_id: int):
     """
