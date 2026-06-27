@@ -42,3 +42,22 @@ async def get_review_by_id(review_id: int):
         status_code=status.HTTP_404_NOT_FOUND,
         detail=f"Review with ID {review_id} not found"
     )
+
+@router.post("/", response_model=Review, status_code=status.HTTP_201_CREATED)
+async def create_review(new_review: Review):
+    """
+    Create a new guest review.
+    Validates that the ID is unique before appending to the in-memory list.
+    """
+    # Check if a review with the same ID already exists in our mock data
+    for review in SAMPLE_REVIEWS:
+        if review["id"] == new_review.id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Review with ID {new_review.id} already exists"
+            )
+            
+    # Convert Pydantic object to dictionary and save it to our in-memory list
+    SAMPLE_REVIEWS.append(new_review.model_dump())
+    
+    return new_review
