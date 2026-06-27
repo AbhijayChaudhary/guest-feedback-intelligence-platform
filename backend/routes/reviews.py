@@ -61,3 +61,29 @@ async def create_review(new_review: Review):
     SAMPLE_REVIEWS.append(new_review.model_dump())
     
     return new_review
+
+@router.put("/{review_id}", response_model=Review, status_code=status.HTTP_200_OK)
+async def update_review(review_id: int, updated_review: Review):
+    """
+    Update an existing guest review by its ID.
+    Replaces the review data, forcing the ID to remain as specified in the path.
+    """
+    # Search for the review in our in-memory list
+    for idx, review in enumerate(SAMPLE_REVIEWS):
+        if review["id"] == review_id:
+            # Prepare the updated review dictionary, preserving the URL path ID
+            review_dict = updated_review.model_dump()
+            review_dict["id"] = review_id
+            
+            # Replace the existing review data in-place
+            SAMPLE_REVIEWS[idx] = review_dict
+            
+            # Ensure returning object matches the path ID
+            updated_review.id = review_id
+            return updated_review
+            
+    # Raise a 404 error if the review to update doesn't exist
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"Review with ID {review_id} not found"
+    )
