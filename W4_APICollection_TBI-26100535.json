@@ -1,0 +1,392 @@
+{
+  "info": {
+    "_postman_id": "b0b342ca-af11-498b-917c-e754af3f4c61",
+    "name": "GuestBook API",
+    "description": "GuestBook REST API Collection\n\nThis collection contains all CRUD operations and the search endpoint for the GuestBook FastAPI backend.\n\nEndpoints Included:\n- Get All Reviews\n- Get Review By ID\n- Search Reviews\n- Create Review\n- Update Review\n- Delete Review",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56220845",
+    "_collection_link": "https://go.postman.co/collection/56220845-b0b342ca-af11-498b-917c-e754af3f4c61?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get All Reviews",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/reviews",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8000",
+          "path": ["api", "reviews"]
+        }
+      },
+      "response": [
+        {
+          "name": "200 OK - Get All Reviews",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/reviews",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "8000",
+              "path": ["api", "reviews"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Sat, 27 Jun 2026 18:28:04 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "2261"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 1,\n        \"guest_name\": \"Alice Johnson\",\n        \"rating\": 5,\n        \"review\": \"The homestay was absolutely spotless! The bathrooms and bed sheets were incredibly clean and fresh. Highly recommended!\",\n        \"sentiment\": \"Positive\",\n        \"category\": \"Cleanliness\",\n        \"created_at\": \"2026-06-20T10:00:00Z\"\n    },\n    {\n        \"id\": 2,\n        \"guest_name\": \"Mark Davis\",\n        \"rating\": 2,\n        \"review\": \"The breakfast provided was cold and quite disappointing. There were limited options and we ended up eating out.\",\n        \"sentiment\": \"Negative\",\n        \"category\": \"Food\",\n        \"created_at\": \"2026-06-21T08:30:00Z\"\n    },\n    {\n        \"id\": 3,\n        \"guest_name\": \"Sophia Martinez\",\n        \"rating\": 5,\n        \"review\": \"The host and staff were incredibly welcoming and helpful. They went above and beyond to suggest local sightseeing spots.\",\n        \"sentiment\": \"Positive\",\n        \"category\": \"Staff\",\n        \"created_at\": \"2026-06-22T14:15:00Z\"\n    },\n    {\n        \"id\": 4,\n        \"guest_name\": \"David Wilson\",\n        \"rating\": 3,\n        \"review\": \"The check-in process was a bit slow as the host was occupied, but once we got in, everything went smoothly.\",\n        \"sentiment\": \"Neutral\",\n        \"category\": \"Check-in\",\n        \"created_at\": \"2026-06-23T11:45:00Z\"\n    },\n    {\n        \"id\": 5,\n        \"guest_name\": \"Emily Taylor\",\n        \"rating\": 4,\n        \"review\": \"Our room was spacious with a beautiful view of the hills. The bed was comfortable, though the air conditioning was a bit noisy.\",\n        \"sentiment\": \"Positive\",\n        \"category\": \"Room\",\n        \"created_at\": \"2026-06-24T16:20:00Z\"\n    },\n    {\n        \"id\": 6,\n        \"guest_name\": \"Robert Brown\",\n        \"rating\": 3,\n        \"review\": \"The location is okay—nice and quiet, but a bit far from the main city center and public transit options.\",\n        \"sentiment\": \"Neutral\",\n        \"category\": \"Location\",\n        \"created_at\": \"2026-06-25T09:10:00Z\"\n    },\n    {\n        \"id\": 7,\n        \"guest_name\": \"Jessica Thomas\",\n        \"rating\": 1,\n        \"review\": \"The Wi-Fi was completely broken during our stay, and the hot water shower stopped working on our second day.\",\n        \"sentiment\": \"Negative\",\n        \"category\": \"Amenities\",\n        \"created_at\": \"2026-06-26T19:40:00Z\"\n    },\n    {\n        \"id\": 8,\n        \"guest_name\": \"James Smith\",\n        \"rating\": 2,\n        \"review\": \"There was dust on the shelves and we found some hairs on the bathroom floor. Could definitely be cleaner.\",\n        \"sentiment\": \"Negative\",\n        \"category\": \"Cleanliness\",\n        \"created_at\": \"2026-06-26T21:10:00Z\"\n    },\n    {\n        \"id\": 9,\n        \"guest_name\": \"Sarah Miller\",\n        \"rating\": 5,\n        \"review\": \"Such friendly service! They even prepared a complimentary local dessert for us in the evening.\",\n        \"sentiment\": \"Positive\",\n        \"category\": \"Staff\",\n        \"created_at\": \"2026-06-27T11:00:00Z\"\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Get Review By ID",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/reviews/1",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8000",
+          "path": ["api", "reviews", "1"]
+        }
+      },
+      "response": [
+        {
+          "name": "200 OK - Get Review By ID",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/reviews/1",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "8000",
+              "path": ["api", "reviews", "1"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Sun, 28 Jun 2026 07:23:51 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "263"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 1,\n    \"guest_name\": \"Alice Johnson\",\n    \"rating\": 5,\n    \"review\": \"The homestay was absolutely spotless! The bathrooms and bed sheets were incredibly clean and fresh. Highly recommended!\",\n    \"sentiment\": \"Positive\",\n    \"category\": \"Cleanliness\",\n    \"created_at\": \"2026-06-20T10:00:00Z\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Search Reviews",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/reviews/search?q=staff",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8000",
+          "path": ["api", "reviews", "search"],
+          "query": [
+            {
+              "key": "q",
+              "value": "staff"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 OK - Search Reviews",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/reviews/search?q=staff",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "8000",
+              "path": ["api", "reviews", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "staff"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Sun, 28 Jun 2026 07:24:26 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "494"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 3,\n        \"guest_name\": \"Sophia Martinez\",\n        \"rating\": 5,\n        \"review\": \"The host and staff were incredibly welcoming and helpful. They went above and beyond to suggest local sightseeing spots.\",\n        \"sentiment\": \"Positive\",\n        \"category\": \"Staff\",\n        \"created_at\": \"2026-06-22T14:15:00Z\"\n    },\n    {\n        \"id\": 9,\n        \"guest_name\": \"Sarah Miller\",\n        \"rating\": 5,\n        \"review\": \"Such friendly service! They even prepared a complimentary local dessert for us in the evening.\",\n        \"sentiment\": \"Positive\",\n        \"category\": \"Staff\",\n        \"created_at\": \"2026-06-27T11:00:00Z\"\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Create Review",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"id\": 10,\n    \"guest_name\": \"John Doe\",\n    \"rating\": 5,\n    \"review\": \"Fantastic amenities and super clean rooms.\",\n    \"sentiment\": \"Positive\",\n    \"category\": \"Amenities\",\n    \"created_at\": \"2026-06-27T12:00:00Z\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/reviews",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8000",
+          "path": ["api", "reviews"]
+        }
+      },
+      "response": [
+        {
+          "name": "201 Created - Create Review",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": 10,\n    \"guest_name\": \"John Doe\",\n    \"rating\": 5,\n    \"review\": \"Fantastic amenities and super clean rooms.\",\n    \"sentiment\": \"Positive\",\n    \"category\": \"Amenities\",\n    \"created_at\": \"2026-06-27T12:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/reviews",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "8000",
+              "path": ["api", "reviews"]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Sat, 27 Jun 2026 18:01:31 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "180"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 10,\n    \"guest_name\": \"John Doe\",\n    \"rating\": 5,\n    \"review\": \"Fantastic amenities and super clean rooms.\",\n    \"sentiment\": \"Positive\",\n    \"category\": \"Amenities\",\n    \"created_at\": \"2026-06-27T12:00:00Z\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Review",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"id\": 99,\n    \"guest_name\": \"Alice Johnson Updated\",\n    \"rating\": 5,\n    \"review\": \"Updated review from Postman.\",\n    \"sentiment\": \"Positive\",\n    \"category\": \"Cleanliness\",\n    \"created_at\": \"2026-06-20T10:00:00Z\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/reviews/1",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8000",
+          "path": ["api", "reviews", "1"]
+        }
+      },
+      "response": [
+        {
+          "name": "200 OK - Update Review",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": 99,\n    \"guest_name\": \"Alice Johnson Updated\",\n    \"rating\": 5,\n    \"review\": \"Updated review from Postman.\",\n    \"sentiment\": \"Positive\",\n    \"category\": \"Cleanliness\",\n    \"created_at\": \"2026-06-20T10:00:00Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/reviews/1",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "8000",
+              "path": ["api", "reviews", "1"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Sat, 27 Jun 2026 18:02:56 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-length",
+              "value": "180"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 1,\n    \"guest_name\": \"Alice Johnson Updated\",\n    \"rating\": 5,\n    \"review\": \"Updated review from Postman.\",\n    \"sentiment\": \"Positive\",\n    \"category\": \"Cleanliness\",\n    \"created_at\": \"2026-06-20T10:00:00Z\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Review",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/reviews/2",
+          "protocol": "http",
+          "host": ["127", "0", "0", "1"],
+          "port": "8000",
+          "path": ["api", "reviews", "2"]
+        }
+      },
+      "response": [
+        {
+          "name": "204 No Content - Delete Review",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/reviews/2",
+              "protocol": "http",
+              "host": ["127", "0", "0", "1"],
+              "port": "8000",
+              "path": ["api", "reviews", "2"]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "date",
+              "value": "Sun, 28 Jun 2026 08:03:37 GMT"
+            },
+            {
+              "key": "server",
+              "value": "uvicorn"
+            },
+            {
+              "key": "content-type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    }
+  ]
+}
