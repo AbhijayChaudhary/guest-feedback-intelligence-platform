@@ -1,5 +1,6 @@
 import Hero from '@/components/Hero';
 import FeatureCard from '@/components/FeatureCard';
+import ReviewList from '@/components/ReviewList';
 
 export default function Home() {
   const features = [
@@ -44,7 +45,7 @@ export default function Home() {
   return (
     <div className="bg-white dark:bg-gray-900 transition-colors duration-300">
       <Hero />
-      
+
       <section className="py-16 bg-gray-50/50 dark:bg-gray-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
@@ -53,10 +54,10 @@ export default function Home() {
               Practical tools designed to help you manage guest feedback effectively.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <FeatureCard 
+              <FeatureCard
                 key={index}
                 title={feature.title}
                 description={feature.description}
@@ -133,6 +134,22 @@ export default function Home() {
               </button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4">
+
+          <h2 className="text-3xl font-bold mb-2">
+            Latest Guest Reviews
+          </h2>
+
+          <p className="text-gray-600 mb-8">
+            Showing the latest 5 reviews fetched from the FastAPI backend.
+          </p>
+
+          <ReviewList />
+
         </div>
       </section>
     </div>

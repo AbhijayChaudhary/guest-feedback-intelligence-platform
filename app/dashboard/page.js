@@ -1,22 +1,105 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui';
 
 export default function DashboardPage() {
-  const stats = [
-    { label: 'Total Reviews', value: '1,250', change: '+12% from last month', icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2' },
-    { label: 'Positive Reviews', value: '82%', change: '+5% improvement', icon: 'M14 10h4.757c1.27 0 2.539.6 3.018 1.613l2.225 4.896A1 1 0 0123.018 18h-11.02m-4.509-3L5.682 9.5a1 1 0 011.812-.853l1.833 3.667' },
-    { label: 'Average Rating', value: '4.5/5', change: 'Stable', icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.175 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z' },
-    { label: 'Pending Responses', value: '12', change: 'Action Required', icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z' },
-  ];
+  // Holds the computed statistics derived from backend review data
+  const [stats, setStats] = useState(null);
 
-  const themes = [
-    { name: 'Cleanliness', score: 94, color: 'text-green-600 bg-green-50' },
-    { name: 'Staff Behaviour', score: 88, color: 'text-blue-600 bg-blue-50' },
-    { name: 'Food Quality', score: 76, color: 'text-yellow-600 bg-yellow-50' },
-    { name: 'Location', score: 92, color: 'text-indigo-600 bg-indigo-50' },
-    { name: 'Check-in Experience', score: 65, color: 'text-red-600 bg-red-50' },
-  ];
+  // Loading and error states for the fetch
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  // Fetch all reviews once on mount and compute sentiment counts
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/reviews');
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const reviews = await response.json();
+
+        // Count each sentiment type (case-insensitive)
+        const positive = reviews.filter(
+          (r) => r.sentiment?.toLowerCase() === 'positive'
+        ).length;
+        const negative = reviews.filter(
+          (r) => r.sentiment?.toLowerCase() === 'negative'
+        ).length;
+        const neutral = reviews.filter(
+          (r) => r.sentiment?.toLowerCase() === 'neutral'
+        ).length;
+
+        // Count reviews per category and sort by count descending
+        const categoryCounts = {};
+        reviews.forEach((r) => {
+          if (r.category) {
+            categoryCounts[r.category] = (categoryCounts[r.category] || 0) + 1;
+          }
+        });
+
+        // Convert to a sorted array: [{ name, count }, ...]
+        const themes = Object.entries(categoryCounts)
+          .map(([name, count]) => ({ name, count }))
+          .sort((a, b) => b.count - a.count);
+
+        setStats({
+          total: reviews.length,
+          positive,
+          negative,
+          neutral,
+          themes,
+        });
+      } catch (err) {
+        console.error('Failed to fetch dashboard data:', err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchStats();
+  }, []);
+
+  // Stat card definitions — icons are the same SVG paths as before
+  const statCards = stats
+    ? [
+        {
+          label: 'Total Reviews',
+          value: stats.total,
+          change: 'From backend',
+          icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2',
+        },
+        {
+          label: 'Positive Reviews',
+          value: stats.positive,
+          change: '+Positive sentiment',
+          icon: 'M14 10h4.757c1.27 0 2.539.6 3.018 1.613l2.225 4.896A1 1 0 0123.018 18h-11.02m-4.509-3L5.682 9.5a1 1 0 011.812-.853l1.833 3.667',
+        },
+        {
+          label: 'Negative Reviews',
+          value: stats.negative,
+          change: 'Negative sentiment',
+          icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z',
+        },
+        {
+          label: 'Neutral Reviews',
+          value: stats.neutral,
+          change: 'Neutral sentiment',
+          icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z',
+        },
+      ]
+    : [];
+
+  // Derive theme list from fetched data; empty array until data arrives
+  const themes = stats?.themes ?? [];
+
+  // The highest category count is used as the 100% baseline for progress bars
+  const maxThemeCount = themes.length > 0 ? themes[0].count : 1;
 
   const insights = [
     { text: 'Guests frequently praise room cleanliness.', type: 'positive' },
@@ -40,7 +123,22 @@ export default function DashboardPage() {
 
         {/* Highlight Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, i) => (
+          {/* Show loading message while the API call is in-flight */}
+          {loading && (
+            <p className="col-span-4 text-sm text-gray-500 dark:text-gray-400 text-center py-4">
+              Loading dashboard...
+            </p>
+          )}
+
+          {/* Show error message if the API request failed */}
+          {!loading && error && (
+            <p className="col-span-4 text-sm text-red-500 text-center py-4">
+              Failed to load dashboard data.
+            </p>
+          )}
+
+          {/* Render stat cards once data is available */}
+          {statCards.map((stat, i) => (
             <div key={i} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 shadow-sm transition-colors duration-300">
               <div className="flex justify-between items-start mb-2">
                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{stat.label}</p>
@@ -109,20 +207,28 @@ export default function DashboardPage() {
           <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 shadow-sm flex flex-col transition-colors duration-300">
             <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-6">Top Mentioned Themes</h2>
             <div className="space-y-6">
-              {themes.map((theme, i) => (
-                <div key={i} className="space-y-2">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="font-semibold text-gray-700 dark:text-gray-300">{theme.name}</span>
-                    <span className="text-gray-500 dark:text-gray-400 font-medium">{theme.score}%</span>
+              {loading && (
+                <p className="text-xs text-gray-400 dark:text-gray-500">Loading themes...</p>
+              )}
+              {themes.map((theme, i) => {
+                // Bar width is proportional to the most-frequent category (= 100%)
+                const barWidth = Math.round((theme.count / maxThemeCount) * 100);
+                const label = theme.count === 1 ? '1 Review' : `${theme.count} Reviews`;
+                return (
+                  <div key={i} className="space-y-2">
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="font-semibold text-gray-700 dark:text-gray-300">{theme.name}</span>
+                      <span className="text-gray-500 dark:text-gray-400 font-medium">{label}</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div className="h-full bg-blue-600 rounded-full" style={{ width: `${barWidth}%` }}></div>
+                    </div>
                   </div>
-                  <div className="w-full h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div className="h-full bg-blue-600 rounded-full" style={{ width: `${theme.score}%` }}></div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="mt-auto pt-8 border-t border-gray-100 dark:border-gray-700 italic text-[11px] text-gray-400 dark:text-gray-500">
-              * Themes are automatically extracted using NLP model v2.1
+              * Categories are counted directly from backend review data.
             </div>
           </div>
         </div>
