@@ -270,5 +270,9 @@ dist/
 # OS Files
 .DS_Store
 
+# Documentation
+AGENTS.md
+CLAUDE.md
+
 #Postman
 GuestBook_API.postman_collection.json
