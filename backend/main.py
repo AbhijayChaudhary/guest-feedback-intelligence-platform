@@ -9,6 +9,8 @@ from routes import reviews_router
 
 # Initialize database connection
 from utils import database
+from utils.seeding import seed_database
+seed_database()
 
 # Load environment variables from .env if present
 load_dotenv()

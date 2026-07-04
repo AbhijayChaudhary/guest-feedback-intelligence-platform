@@ -5,11 +5,15 @@ This module defines the schema/structure for guest reviews using Pydantic's Base
 It ensures that all reviews contain the required fields and matching data types.
 """
 
+from typing import Optional
 from pydantic import BaseModel
 
 class Review(BaseModel):
     # Unique identifier for the review
     id: int
+    
+    # Reference to the property this review belongs to (defaults to 1 for backward compatibility)
+    property_id: Optional[int] = 1
     
     # Name of the guest who wrote the review
     guest_name: str
