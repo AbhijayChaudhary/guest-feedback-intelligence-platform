@@ -1,6 +1,7 @@
 import Hero from '@/components/Hero';
 import FeatureCard from '@/components/FeatureCard';
 import ReviewList from '@/components/ReviewList';
+import DashboardPreview from '@/components/DashboardPreview';
 
 export default function Home() {
   const features = [
@@ -136,6 +137,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <DashboardPreview />
 
       <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4">
