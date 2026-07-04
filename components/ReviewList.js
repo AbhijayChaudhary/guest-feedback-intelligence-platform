@@ -14,7 +14,8 @@ export default function ReviewList() {
         async function fetchReviews() {
             try {
                 // Call the FastAPI backend endpoint
-                const response = await fetch("http://127.0.0.1:8000/api/reviews");
+                const API_URL = process.env.NEXT_PUBLIC_API_URL;
+                const response = await fetch(`${API_URL}/api/reviews/`);
 
                 // Convert JSON response into a JavaScript object
                 const data = await response.json();
