@@ -7,6 +7,9 @@ from dotenv import load_dotenv
 # Import routers
 from routes import reviews_router
 
+# Initialize database connection
+from utils import database
+
 # Load environment variables from .env if present
 load_dotenv()
 
