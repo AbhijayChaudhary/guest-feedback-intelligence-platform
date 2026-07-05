@@ -6,6 +6,7 @@ import ReviewFilters from '@/components/ReviewFilters';
 import ReviewCard from '@/components/ReviewCard';
 import LoadingState from '@/components/LoadingState';
 import ErrorState from '@/components/ErrorState';
+import EditReviewModal from '@/components/EditReviewModal';
 
 export default function DashboardPage() {
   // Configured FastAPI base URL from Next.js environment variables
@@ -22,6 +23,10 @@ export default function DashboardPage() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedSentiment, setSelectedSentiment] = useState('');
   const [selectedRating, setSelectedRating] = useState('');
+
+  // Edit Modal state management
+  const [selectedReview, setSelectedReview] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // Fetch all reviews once when the page loads to initialize stats and base list
   const fetchAllReviews = async () => {
@@ -110,6 +115,18 @@ export default function DashboardPage() {
     setReviews(allReviews);
   };
 
+  // Handle opening the Edit Review Modal
+  const handleEditClick = (review) => {
+    setSelectedReview(review);
+    setIsEditModalOpen(true);
+  };
+
+  // Handle updating lists locally after successful PUT request
+  const handleReviewUpdate = (updatedReview) => {
+    setAllReviews((prev) => prev.map((r) => r.id === updatedReview.id ? updatedReview : r));
+    setReviews((prev) => prev.map((r) => r.id === updatedReview.id ? updatedReview : r));
+  };
+
 
   // Derive unique categories dynamically from the loaded master list of reviews
   const categories = [...new Set(allReviews.map((r) => r.category))].filter(Boolean);
@@ -186,12 +203,21 @@ export default function DashboardPage() {
                     key={review.id}
                     review={review}
                     onDelete={handleDeleteReview}
+                    onEdit={handleEditClick}
                   />
                 ))}
               </div>
             )}
           </>
         )}
+
+        {/* Modal form for editing reviews */}
+        <EditReviewModal
+          review={selectedReview}
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          onUpdate={handleReviewUpdate}
+        />
       </div>
     </div>
   );

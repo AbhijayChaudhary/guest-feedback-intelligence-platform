@@ -6,7 +6,7 @@ import { Button } from './ui';
  * Displays review details including guest name, rating, text, created date, category, sentiment, and property ID.
  * Includes a delete button to trigger the deletion confirmation dialog.
  */
-const ReviewCard = ({ review, onDelete }) => {
+const ReviewCard = ({ review, onDelete, onEdit }) => {
   // Map sentiment labels to Tailwind color schemes
   const sentimentColors = {
     Positive: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
@@ -55,17 +55,30 @@ const ReviewCard = ({ review, onDelete }) => {
           </span>
         </div>
 
-        <Button
-          variant="outline"
-          size="sm"
-          className="w-full text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950/20 border-red-200 dark:border-red-900/50"
-          onClick={() => onDelete(review.id)}
-        >
-          <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-          Delete Review
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-950/20 border-blue-200 dark:border-blue-900/50 cursor-pointer"
+            onClick={() => onEdit(review)}
+          >
+            <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+            Edit
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex-1 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950/20 border-red-200 dark:border-red-900/50 cursor-pointer"
+            onClick={() => onDelete(review.id)}
+          >
+            <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            Delete
+          </Button>
+        </div>
       </div>
     </div>
   );
