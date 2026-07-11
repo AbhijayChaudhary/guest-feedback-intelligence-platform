@@ -7,8 +7,11 @@ import ReviewCard from '@/components/ReviewCard';
 import LoadingState from '@/components/LoadingState';
 import ErrorState from '@/components/ErrorState';
 import EditReviewModal from '@/components/EditReviewModal';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import { useAuth } from '@/context/AuthContext';
 
 export default function DashboardPage() {
+  const { token } = useAuth();
   // Configured FastAPI base URL from Next.js environment variables
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
@@ -30,10 +33,15 @@ export default function DashboardPage() {
 
   // Fetch all reviews once when the page loads to initialize stats and base list
   const fetchAllReviews = async () => {
+    if (!token) return;
     setLoading(true);
     setError(false);
     try {
-      const response = await fetch(`${API_URL}/api/reviews/`);
+      const response = await fetch(`${API_URL}/api/reviews/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (!response.ok) {
         throw new Error('Failed to retrieve reviews');
       }
@@ -50,8 +58,10 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
-    fetchAllReviews();
-  }, []);
+    if (token) {
+      fetchAllReviews();
+    }
+  }, [token]);
 
   // Debounced Search API call: hits /api/reviews/search?q= when searchQuery is typed
   useEffect(() => {
@@ -63,10 +73,15 @@ export default function DashboardPage() {
     }
 
     const searchDebounce = setTimeout(async () => {
+      if (!token) return;
       setLoading(true);
       setError(false);
       try {
-        const response = await fetch(`${API_URL}/api/reviews/search?q=${encodeURIComponent(searchQuery)}`);
+        const response = await fetch(`${API_URL}/api/reviews/search?q=${encodeURIComponent(searchQuery)}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         if (!response.ok) {
           throw new Error('Search request failed');
         }
@@ -81,7 +96,7 @@ export default function DashboardPage() {
     }, 450); // 450ms debounce helps prevent unnecessary API hits as the user types
 
     return () => clearTimeout(searchDebounce);
-  }, [searchQuery, allReviews]);
+  }, [searchQuery, allReviews, token]);
 
   // Handle deleting a review
   const handleDeleteReview = async (id) => {
@@ -149,7 +164,8 @@ export default function DashboardPage() {
   const stats = { total, averageRating, positive, negative };
 
   return (
-    <div className="pt-24 pb-12 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
+    <ProtectedRoute>
+      <div className="pt-24 pb-12 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header Section */}
@@ -220,5 +236,6 @@ export default function DashboardPage() {
         />
       </div>
     </div>
+    </ProtectedRoute>
   );
 }

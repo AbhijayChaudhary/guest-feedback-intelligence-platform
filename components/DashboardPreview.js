@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
 
 /**
  * DashboardPreview Component
@@ -11,6 +12,7 @@ import Link from 'next/link';
  * - A button to open the full property manager dashboard
  */
 export default function DashboardPreview() {
+  const { token, loading: authLoading } = useAuth();
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,10 +20,21 @@ export default function DashboardPreview() {
 
   // Retrieve reviews from the FastAPI backend endpoint
   const fetchReviews = async () => {
+    if (authLoading) return;
+
+    // Stop loading gracefully if unauthenticated, preventing 401 calls
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(false);
     try {
-      const response = await fetch(`${API_URL}/api/reviews/`);
+      const headers = {
+        'Authorization': `Bearer ${token}`
+      };
+      const response = await fetch(`${API_URL}/api/reviews/`, { headers });
       if (!response.ok) {
         throw new Error('Failed to retrieve reviews');
       }
@@ -36,8 +49,10 @@ export default function DashboardPreview() {
   };
 
   useEffect(() => {
-    fetchReviews();
-  }, []);
+    if (!authLoading) {
+      fetchReviews();
+    }
+  }, [authLoading, token]);
 
   // Compute stats metrics dynamically on the client side
   const total = reviews.length;

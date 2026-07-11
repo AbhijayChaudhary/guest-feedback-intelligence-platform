@@ -2,8 +2,11 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import { useAuth } from '@/context/AuthContext';
 
 export default function CreateReviewPage() {
+  const { token } = useAuth();
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
   // Form states
@@ -49,7 +52,11 @@ export default function CreateReviewPage() {
 
     try {
       // 2. Fetch all reviews to determine the largest existing custom ID
-      const listResponse = await fetch(`${API_URL}/api/reviews/`);
+      const listResponse = await fetch(`${API_URL}/api/reviews/`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (!listResponse.ok) {
         throw new Error('Failed to retrieve existing reviews to determine review ID.');
       }
@@ -114,7 +121,8 @@ export default function CreateReviewPage() {
   };
 
   return (
-    <div className="pt-24 pb-12 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
+    <ProtectedRoute>
+      <div className="pt-24 pb-12 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Page Header */}
@@ -297,5 +305,6 @@ export default function CreateReviewPage() {
         
       </div>
     </div>
+    </ProtectedRoute>
   );
 }

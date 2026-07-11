@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ReviewList() {
+    const { token, loading: authLoading } = useAuth();
     // Stores the reviews fetched from the backend
     const [reviews, setReviews] = useState([]);
 
@@ -11,11 +13,26 @@ export default function ReviewList() {
 
     // Fetch reviews once when the component is first loaded
     useEffect(() => {
+        if (authLoading) return;
+
+        // Stop loading gracefully if unauthenticated, preventing 401 calls
+        if (!token) {
+            setLoading(false);
+            return;
+        }
+
         async function fetchReviews() {
             try {
                 // Call the FastAPI backend endpoint
-                const API_URL = process.env.NEXT_PUBLIC_API_URL;
-                const response = await fetch(`${API_URL}/api/reviews/`);
+                const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+                const headers = {
+                    'Authorization': `Bearer ${token}`
+                };
+                const response = await fetch(`${API_URL}/api/reviews/`, { headers });
+
+                if (!response.ok) {
+                    throw new Error(`Request failed with status ${response.status}`);
+                }
 
                 // Convert JSON response into a JavaScript object
                 const data = await response.json();
@@ -31,7 +48,7 @@ export default function ReviewList() {
         }
 
         fetchReviews();
-    }, []);
+    }, [authLoading, token]);
 
     // Display a loading message until the API call completes
     if (loading) {
