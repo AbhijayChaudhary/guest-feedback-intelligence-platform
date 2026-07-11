@@ -25,7 +25,8 @@ COLLECTION_NAME = os.getenv("COLLECTION_NAME", "reviews")
 # Global PyMongo client, database, and collection objects
 client = None
 db = None
-reviews_collection = None
+review_collection = None
+users_collection = None
 
 try:
     if not MONGO_URI:
@@ -34,14 +35,16 @@ try:
     # Initialize the client with local SSL/TLS certificate verification path via certifi
     client = MongoClient(MONGO_URI, tlsCAFile=certifi.where())
     
-    # Select the database and collection
+    # Select the database and collections
     db = client[DATABASE_NAME]
     review_collection = db[COLLECTION_NAME]
+    users_collection = db["users"]
     
     # PyMongo connections are lazy. We perform a ping command on the admin
     # database to verify that the connection works and credentials are correct.
     client.admin.command("ping")
     print("✅ Connected to MongoDB Atlas successfully.")
+
 
 except ConnectionFailure as conn_err:
     print(f"❌ Failed to connect to MongoDB Atlas (Connection Error): {conn_err}")

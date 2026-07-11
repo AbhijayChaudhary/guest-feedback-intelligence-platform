@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 
 # Import routers
-from routes import reviews_router
+from routes import reviews_router, auth_router
 
 # Initialize database connection
 from utils import database
@@ -41,6 +41,8 @@ app.add_middleware(
 
 # Register routers
 app.include_router(reviews_router, prefix="/api")
+app.include_router(auth_router, prefix="/api")
+
 
 # Global Exception Handler
 # Catches all exceptions and always returns a standard 500 Internal Server Error response.
