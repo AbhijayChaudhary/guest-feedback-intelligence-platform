@@ -6,8 +6,11 @@ It handles requests under the '/api/reviews' path (once registered) and performs
 live database operations against MongoDB.
 """
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from typing import List, Dict, Any
+
+# Import authentication middleware dependency
+from middleware import require_auth
 
 # Import our Review model
 from models import Review
@@ -32,9 +35,14 @@ router = APIRouter(
 )
 
 @router.get("/", response_model=List[Review], status_code=status.HTTP_200_OK)
-async def get_all_reviews():
+async def get_all_reviews(current_user: dict = Depends(require_auth)):
     """
     Retrieve all guest reviews from MongoDB, sorted by ID in ascending order.
+    
+    This endpoint is protected by require_auth middleware:
+    - Extracts 'Authorization' header and validates 'Bearer <token>' format.
+    - Decodes JWT access token and queries MongoDB for the matching user.
+    - If successful, proceeds and makes the authenticated 'current_user' available.
     """
     # Query MongoDB for all reviews
     cursor = review_collection.find()
