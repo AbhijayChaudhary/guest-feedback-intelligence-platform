@@ -158,3 +158,73 @@ async def login(request: Request, req: LoginRequest):
             "role": user["role"]
         }
     }
+
+
+class GoogleLoginRequest(BaseModel):
+    # Full name of the user from Google Profile
+    name: str = Field(..., min_length=2, max_length=50, description="The user's full name from Google")
+    
+    # Email address of the user from Google Profile
+    email: EmailStr = Field(..., description="The user's Google email address")
+
+
+@router.post("/google", status_code=status.HTTP_200_OK)
+@limiter.limit("5/15 minutes")
+async def google_login(request: Request, req: GoogleLoginRequest):
+    """
+    Authenticate or automatically register a user via Google OAuth profile details.
+    
+    If the user does not exist in MongoDB, a new user account is created with:
+    - role: "customer"
+    - created_at: timestamp
+    - password: safe bcrypt placeholder hash
+    Generates and returns the standard JWT access token and user info payload.
+    """
+    email = req.email.strip().lower()
+    
+    # Retrieve user from the database
+    user = users_collection.find_one({"email": email})
+    
+    if not user:
+        # Determine the custom ID using max existing ID + 1
+        max_user = users_collection.find_one(sort=[("id", -1)])
+        new_id = (max_user["id"] + 1) if max_user else 1
+        
+        # Generate ISO created_at timestamp
+        created_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        
+        # Prepare the user document with a secure placeholder password hash
+        user_doc = {
+            "id": new_id,
+            "name": req.name.strip(),
+            "email": email,
+            "password": hash_password("google_oauth_placeholder_password_not_usable"),
+            "role": "customer",
+            "created_at": created_at
+        }
+        
+        # Insert user details into MongoDB
+        users_collection.insert_one(user_doc)
+        user = user_doc
+        
+    # Prepare the JWT payload details
+    token_data = {
+        "user_id": user["id"],
+        "email": user["email"],
+        "role": user["role"]
+    }
+    
+    # Create the token
+    access_token = create_access_token(token_data)
+    
+    # Return standard response payload matching the login endpoint format
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user": {
+            "id": user["id"],
+            "name": user["name"],
+            "email": user["email"],
+            "role": user["role"]
+        }
+    }

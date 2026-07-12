@@ -1,13 +1,17 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useSession, signOut } from 'next-auth/react';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [localLoading, setLocalLoading] = useState(true);
+  const [googleLoggingIn, setGoogleLoggingIn] = useState(false);
+
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     // Initial check on mount to restore user session
@@ -25,9 +29,44 @@ export function AuthProvider({ children }) {
       localStorage.removeItem('guestbook_token');
       localStorage.removeItem('guestbook_user');
     } finally {
-      setLoading(false);
+      setLocalLoading(false);
     }
   }, []);
+
+  // Synchronize Google OAuth session with our FastAPI backend
+  useEffect(() => {
+    // If NextAuth has authenticated with Google, but we don't have our custom JWT token yet
+    if (status === 'authenticated' && session?.user && !token && !googleLoggingIn) {
+      async function syncGoogleUser() {
+        setGoogleLoggingIn(true);
+        try {
+          const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+          const response = await fetch(`${API_URL}/api/auth/google`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: session.user.name || 'Google User',
+              email: session.user.email,
+            }),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            login(data.access_token, data.user);
+          } else {
+            console.error('Failed to sync Google user with backend:', response.status);
+          }
+        } catch (error) {
+          console.error('Error syncing Google user with backend:', error);
+        } finally {
+          setGoogleLoggingIn(false);
+        }
+      }
+      syncGoogleUser();
+    }
+  }, [session, status, token, googleLoggingIn]);
 
   const login = (newToken, newUser) => {
     setToken(newToken);
@@ -41,9 +80,14 @@ export function AuthProvider({ children }) {
     setUser(null);
     localStorage.removeItem('guestbook_token');
     localStorage.removeItem('guestbook_user');
+    // Sign out from NextAuth as well to keep sessions aligned
+    signOut({ redirect: false });
   };
 
   const isAuthenticated = !!token;
+  
+  // Combine local state loading, next-auth state loading, and token exchange progress
+  const loading = localLoading || status === 'loading' || googleLoggingIn;
 
   return (
     <AuthContext.Provider value={{ user, token, loading, login, logout, isAuthenticated }}>

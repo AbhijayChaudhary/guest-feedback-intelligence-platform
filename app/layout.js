@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { AuthProvider } from "@/context/AuthContext";
+import NextAuthProvider from "@/components/NextAuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,13 +46,15 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-300`}
       >
         <ThemeProvider>
-          <AuthProvider>
-            <Navbar />
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
-          </AuthProvider>
+          <NextAuthProvider>
+            <AuthProvider>
+              <Navbar />
+              <main className="flex-grow">
+                {children}
+              </main>
+              <Footer />
+            </AuthProvider>
+          </NextAuthProvider>
         </ThemeProvider>
       </body>
     </html>
