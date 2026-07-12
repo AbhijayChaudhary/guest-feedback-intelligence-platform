@@ -5,9 +5,10 @@ This module defines the API endpoints for user registration and login.
 It handles password hashing, verification, validation, and JWT token issuance.
 """
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Request
 from pydantic import BaseModel, Field, EmailStr
 from datetime import datetime, timezone
+from utils.rate_limiter import limiter
 
 # Import the MongoDB collection object
 from utils.database import users_collection
@@ -44,7 +45,8 @@ class LoginRequest(BaseModel):
 
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
-async def register(req: RegisterRequest):
+@limiter.limit("5/15 minutes")
+async def register(request: Request, req: RegisterRequest):
     """
     Register a new user in the GuestBook system.
     
@@ -107,7 +109,8 @@ async def register(req: RegisterRequest):
 
 
 @router.post("/login", status_code=status.HTTP_200_OK)
-async def login(req: LoginRequest):
+@limiter.limit("5/15 minutes")
+async def login(request: Request, req: LoginRequest):
     """
     Authenticate a user and return a JWT access token.
     

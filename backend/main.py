@@ -4,6 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 
+# Import rate limiter utility and exception
+from utils.rate_limiter import limiter
+from slowapi.errors import RateLimitExceeded
+
 # Import routers
 from routes import reviews_router, auth_router
 
@@ -20,6 +24,18 @@ app = FastAPI(
     description="FastAPI Backend for GuestBook",
     version="1.0.0"
 )
+
+# Connect the rate limiter to the application state
+app.state.limiter = limiter
+
+# Custom Exception Handler for rate limit exceeded errors
+# Returns a clean JSON response with HTTP 429 Too Many Requests status
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={"detail": "Too many requests. Limit is 5 requests per 15 minutes."}
+    )
 
 # CORS (Cross-Origin Resource Sharing) configuration
 # Defaults to localhost:3000 for local Next.js frontend development.
