@@ -110,7 +110,10 @@ async def get_review_by_id(review_id: int):
     return doc
 
 @router.post("/", response_model=Review, status_code=status.HTTP_201_CREATED)
-async def create_review(new_review: Review):
+async def create_review(
+    new_review: Review,
+    current_user: dict = Depends(require_auth)
+):
     """
     Create a new guest review in MongoDB.
     Validates that the ID is unique before inserting.
@@ -135,7 +138,11 @@ async def create_review(new_review: Review):
     return review_dict
 
 @router.put("/{review_id}", response_model=Review, status_code=status.HTTP_200_OK)
-async def update_review(review_id: int, updated_review: Review):
+async def update_review(
+    review_id: int,
+    updated_review: Review,
+    current_user: dict = Depends(require_auth)
+):
     """
     Update an existing guest review in MongoDB by its ID.
     Replaces the review data, forcing the ID to remain as specified in the path.
@@ -163,7 +170,10 @@ async def update_review(review_id: int, updated_review: Review):
     return review_dict
 
 @router.delete("/{review_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_review(review_id: int):
+async def delete_review(
+    review_id: int,
+    current_user: dict = Depends(require_auth)
+):
     """
     Delete a guest review from MongoDB by its ID.
     Returns HTTP 204 No Content on success.
