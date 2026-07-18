@@ -9,7 +9,7 @@ from utils.rate_limiter import limiter
 from slowapi.errors import RateLimitExceeded
 
 # Import routers
-from routes import reviews_router, auth_router
+from routes import reviews_router, auth_router, ai_router
 
 # Initialize database connection
 from utils import database
@@ -58,7 +58,7 @@ app.add_middleware(
 # Register routers
 app.include_router(reviews_router, prefix="/api")
 app.include_router(auth_router, prefix="/api")
-
+app.include_router(ai_router, prefix="/api")
 
 # Global Exception Handler
 # Catches all exceptions and always returns a standard 500 Internal Server Error response.
