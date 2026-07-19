@@ -8,24 +8,41 @@ AI-Powered Guest Feedback Intelligence Platform for Homestay Businesses.
 
 GuestBook is a full-stack web application that helps homestay owners and property managers manage and analyze guest reviews from platforms such as Google Reviews, Booking.com, and TripAdvisor.
 
-The platform stores guest reviews in a MongoDB database and presents them through an interactive dashboard, allowing users to search, filter, and manage feedback efficiently. Future AI integration using the Gemini API will enable sentiment analysis, theme detection, review summarization, response suggestions, and sarcasm detection.
+The platform stores guest reviews in a MongoDB database and presents them through an interactive dashboard, allowing users to search, filter, and manage feedback efficiently. It also integrates the Google Gemini API to perform AI-powered sentiment analysis, theme detection, review summarization, professional response generation, and sarcasm detection in real time.
 
 ---
 
 # Key Features
 
-- View guest reviews through an interactive dashboard
-- Search reviews using keyword-based search
-- Filter reviews by category, sentiment, and rating
-- Create new guest reviews
-- Update existing reviews
-- Delete guest reviews
-- Dashboard statistics for review analytics
-- Homepage dashboard preview
-- Responsive user interface built with Next.js
-- MongoDB Atlas database integration
-- REST API built with FastAPI
-- Dark mode support
+- AI-powered review analysis using Google Gemini
+- Automatic sentiment detection (Positive, Neutral, Negative)
+- Automatic extraction of hospitality themes from guest reviews
+- AI-generated review summaries
+- Professional response suggestions for guest feedback
+- Sarcasm detection in reviews
+- Secure customer authentication with protected routes
+- Interactive review management dashboard
+- Advanced search and filtering
+- Responsive UI with dark mode support
+
+---
+
+# AI Review Analysis Workflow
+
+GuestBook uses the Google Gemini API to analyze guest reviews in real time.
+
+Workflow:
+
+1. Customer submits a guest review.
+2. The frontend sends the review text to the FastAPI backend.
+3. The backend forwards the request to Google Gemini.
+4. Gemini returns structured JSON containing:
+   - Sentiment
+   - Themes
+   - Summary
+   - Suggested response
+   - Sarcasm detection
+5. The frontend displays the AI analysis before the review is submitted to the database.
 
 ---
 
@@ -48,13 +65,14 @@ The platform stores guest reviews in a MongoDB database and presents them throug
 - MongoDB Atlas
 - PyMongo
 
-## AI Integration (Planned)
+## AI Integration 
 
 - Google Gemini API
+- Structured JSON output
 - Sentiment Analysis
 - Theme Detection
-- AI-generated Response Suggestions
 - Review Summarization
+- Professional Response Generation
 - Sarcasm Detection
 
 ---
@@ -70,7 +88,7 @@ Advantages include:
 - JSON-like BSON documents integrate naturally with FastAPI
 - Highly scalable cloud database
 - Simple integration using PyMongo
-- Suitable for storing future AI-generated fields such as summaries, response suggestions, detected themes, and sentiment labels
+- Suitable for storing AI-generated fields such as summaries, suggested responses, detected themes, and sentiment labels.
 
 ---
 
@@ -78,7 +96,7 @@ Advantages include:
 
 The following schema represents the core database structure used by GuestBook. It illustrates the relationships between users, properties, guest reviews, AI analysis results, and detected review themes.
 
-![Database Schema](assets/schema-diagram.png)
+![Database Schema](frontend/assets/schema-diagram.png)
 
 ---
 
@@ -92,9 +110,12 @@ Example:
 MONGO_URI=your_mongodb_connection_string
 DATABASE_NAME=guestbook
 COLLECTION_NAME=reviews
+
+GEMINI_API_KEY=your_google_gemini_api_key
+GEMINI_MODEL=models/gemini-3.5-flash
 ```
 
-Create a `.env.local` file in the project root for the frontend.
+Create a `.env.local` file inside the **frontend** folder.
 
 Example:
 
@@ -215,6 +236,9 @@ Example:
 MONGO_URI=your_mongodb_connection_string
 DATABASE_NAME=guestbook
 COLLECTION_NAME=reviews
+
+GEMINI_API_KEY=your_google_gemini_api_key
+GEMINI_MODEL=models/gemini-3.5-flash
 ```
 
 Start the backend server:
@@ -236,14 +260,30 @@ On startup, the application will automatically connect to MongoDB Atlas and seed
 
 # API Endpoints
 
+## Authentication
+
 | Method | Endpoint | Description |
 |---------|----------|-------------|
-| GET | `/api/reviews/` | Get all reviews |
-| GET | `/api/reviews/{id}` | Get review by ID |
-| GET | `/api/reviews/search?q=` | Search reviews |
-| POST | `/api/reviews/` | Create a review |
-| PUT | `/api/reviews/{id}` | Update a review |
-| DELETE | `/api/reviews/{id}` | Delete a review |
+| POST | `/api/auth/register` | Register a new user |
+| POST | `/api/auth/login` | Authenticate a user and return a JWT |
+| POST | `/api/auth/google` | Authenticate or register a user using Google OAuth |
+
+## Reviews
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/reviews/` | Retrieve all guest reviews |
+| GET | `/api/reviews/{id}` | Retrieve a review by ID |
+| GET | `/api/reviews/search?q=` | Search guest reviews |
+| POST | `/api/reviews/` | Create a new guest review |
+| PUT | `/api/reviews/{id}` | Update an existing guest review |
+| DELETE | `/api/reviews/{id}` | Delete a guest review |
+
+## AI
+
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| POST | `/api/ai/analyze-review` | Analyze a guest review using Google Gemini AI |
 
 ---
 
@@ -252,24 +292,36 @@ On startup, the application will automatically connect to MongoDB Atlas and seed
 ```
 GuestBook/
 │
-├── app/                  # Next.js App Router pages
 ├── backend/
 │   ├── data/
 │   ├── middleware/
 │   ├── models/
 │   ├── routes/
+│   │   ├── ai.py
+│   │   ├── auth.py
+│   │   └── reviews.py
 │   ├── utils/
-│   ├── requirements.txt
-│   └── main.py
+│   │   ├── database.py
+│   │   ├── gemini_service.py
+│   │   ├── jwt_handler.py
+│   │   ├── password.py
+│   │   ├── rate_limiter.py
+│   │   └── seeding.py
+│   ├── main.py
+│   └── requirements.txt
 │
-├── components/           # Reusable UI components
-├── context/              # Theme context
-├── public/
-├── assets/
-│   └── schema-diagram.png
+├── frontend/
+│   ├── app/
+│   ├── assets/
+│   ├── components/
+│   ├── context/
+│   ├── public/
+│   ├── services/
+│   │   └── api.js
+│   ├── package.json
+│   └── .env.example
 │
-├── .env.example
-├── package.json
+├── PROMPTS.md
 └── README.md
 ```
 
@@ -279,18 +331,14 @@ GuestBook/
 
 The following features are planned for future development:
 
-- AI-powered sentiment analysis
-- Theme detection using Gemini API
-- AI-generated response suggestions
-- Review summarization
-- Sarcasm detection
-- Property manager authentication
-- Customer authentication
+- AI-powered dashboard insights and trend visualization
 - Multi-property management
-- Analytics dashboard with charts
-- Review upload from CSV files
+- CSV review import
 - Email notifications
-- Export dashboard reports
+- Export analytics reports (PDF/CSV)
+- Review history and audit logs
+- Role-based access control for property managers
+- Integration with external review platforms (Google Reviews, Booking.com, TripAdvisor)
 
 ---
 
