@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { getReviews } from "@/services/api";
 
 export default function ReviewList() {
     const { token, loading: authLoading } = useAuth();
@@ -23,20 +24,7 @@ export default function ReviewList() {
 
         async function fetchReviews() {
             try {
-                // Call the FastAPI backend endpoint
-                const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
-                const headers = {
-                    'Authorization': `Bearer ${token}`
-                };
-                const response = await fetch(`${API_URL}/api/reviews/`, { headers });
-
-                if (!response.ok) {
-                    throw new Error(`Request failed with status ${response.status}`);
-                }
-
-                // Convert JSON response into a JavaScript object
-                const data = await response.json();
-
+                const data = await getReviews(token);
                 // Save the reviews into state
                 setReviews(data);
             } catch (error) {
