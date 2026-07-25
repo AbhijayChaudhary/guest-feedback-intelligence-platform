@@ -41,6 +41,11 @@ async function request(endpoint, options = {}) {
   try {
     const response = await fetch(url, config);
 
+    // HTTP 204 responses intentionally contain no response body.
+    if (response.status === 204) {
+      return null;
+    }
+
     // Safely parse JSON responses or fallback to text if content type is different
     let data;
     const contentType = response.headers.get('content-type');
@@ -164,4 +169,121 @@ export async function getNextReviewId(token) {
   const reviews = await getReviews(token);
   const maxId = reviews.reduce((max, r) => (r.id > max ? r.id : max), 0);
   return maxId + 1;
+}
+
+/**
+ * Retrieve a single review record by its ID.
+ * 
+ * @param {number|string} id - The unique ID of the review
+ * @param {string} [token] - Optional JWT bearer token for authorization
+ * @returns {Promise<Object>} The review database record
+ */
+export async function getReviewById(id, token) {
+  const headers = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return request(`/api/reviews/${id}`, {
+    method: 'GET',
+    headers,
+  });
+}
+
+/**
+ * Update an existing review record by its ID.
+ * 
+ * @param {number|string} id - The unique ID of the review to update
+ * @param {Object} reviewData - The updated review fields
+ * @param {string} [token] - Optional JWT bearer token for authorization
+ * @returns {Promise<Object>} The updated review database record
+ */
+export async function updateReview(id, reviewData, token) {
+  const headers = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return request(`/api/reviews/${id}`, {
+    method: 'PUT',
+    headers,
+    body: reviewData,
+  });
+}
+
+/**
+ * Delete a review record by its ID.
+ * 
+ * @param {number|string} id - The unique ID of the review to delete
+ * @param {string} [token] - Optional JWT bearer token for authorization
+ * @returns {Promise<any>} Response indicating successful deletion
+ */
+export async function deleteReview(id, token) {
+  const headers = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return request(`/api/reviews/${id}`, {
+    method: 'DELETE',
+    headers,
+  });
+}
+
+/**
+ * Search guest reviews based on a query string.
+ * 
+ * @param {string} query - The search query term
+ * @param {string} [token] - Optional JWT bearer token for authorization
+ * @returns {Promise<Array>} Parsed list of matching review records
+ */
+export async function searchReviews(query, token) {
+  const headers = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return request(`/api/reviews/search?q=${encodeURIComponent(query)}`, {
+    method: 'GET',
+    headers,
+  });
+}
+
+/**
+ * Authentication Endpoints
+ */
+
+/**
+ * Authenticate a user with email and password credentials.
+ * 
+ * @param {Object} credentials - User credentials containing email and password
+ * @returns {Promise<Object>} The authentication payload (access_token, token_type, user details)
+ */
+export async function loginUser(credentials) {
+  return request('/api/auth/login', {
+    method: 'POST',
+    body: credentials,
+  });
+}
+
+/**
+ * Register a new user in the GuestBook database.
+ * 
+ * @param {Object} userData - User registration details (name, email, password, role)
+ * @returns {Promise<Object>} The registered user database record
+ */
+export async function registerUser(userData) {
+  return request('/api/auth/register', {
+    method: 'POST',
+    body: userData,
+  });
+}
+
+/**
+ * Authenticate or automatically register a user using Google OAuth profile details.
+ * 
+ * @param {Object} userData - The Google user profile data (name, email)
+ * @returns {Promise<Object>} The authentication payload containing JWT access token
+ */
+export async function googleLogin(userData) {
+  return request('/api/auth/google', {
+    method: 'POST',
+    body: userData,
+  });
 }

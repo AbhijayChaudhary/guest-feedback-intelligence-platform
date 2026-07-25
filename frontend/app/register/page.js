@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Input, Button } from '@/components/ui';
+import { registerUser } from '@/services/api';
 
 export default function RegisterPage() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
   const router = useRouter();
 
   // Form field states
@@ -111,32 +111,12 @@ export default function RegisterPage() {
     setSubmitting(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: name.trim(),
-          email: email.trim().toLowerCase(),
-          password: password,
-          role: role
-        }),
+      await registerUser({
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        password: password,
+        role: role
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        let errMsg = 'Registration failed. Please try again.';
-        if (data && data.detail) {
-          if (typeof data.detail === 'string') {
-            errMsg = data.detail;
-          } else if (Array.isArray(data.detail)) {
-            errMsg = data.detail.map(err => err.msg).join(', ');
-          }
-        }
-        throw new Error(errMsg);
-      }
 
       // Success
       setSuccessMessage('Registration successful! Redirecting to login page...');

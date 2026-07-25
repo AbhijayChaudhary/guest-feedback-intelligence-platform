@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { Input, Button } from '@/components/ui';
 import { useAuth } from '@/context/AuthContext';
 import { signIn } from 'next-auth/react';
+import { loginUser } from '@/services/api';
 
 export default function LoginPage() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
   const router = useRouter();
   const { login, isAuthenticated } = useAuth();
   
@@ -90,30 +90,10 @@ export default function LoginPage() {
     setSubmitting(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email.trim().toLowerCase(),
-          password: password,
-        }),
+      const data = await loginUser({
+        email: email.trim().toLowerCase(),
+        password: password,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        let errMsg = 'Invalid email or password.';
-        if (data && data.detail) {
-          if (typeof data.detail === 'string') {
-            errMsg = data.detail;
-          } else if (Array.isArray(data.detail)) {
-            errMsg = data.detail.map(err => err.msg).join(', ');
-          }
-        }
-        throw new Error(errMsg);
-      }
 
       // Success: Save details to AuthContext and localStorage
       login(data.access_token, data.user);

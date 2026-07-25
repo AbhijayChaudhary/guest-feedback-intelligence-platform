@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Modal from './ui/Modal';
 import { Button } from './ui';
+import { useAuth } from '@/context/AuthContext';
+import { updateReview } from '@/services/api';
 
 /**
  * EditReviewModal Component
@@ -11,7 +13,7 @@ import { Button } from './ui';
  * Validates inputs, handles PUT requests to the backend, and invokes onUpdate callback.
  */
 export default function EditReviewModal({ review, isOpen, onClose, onUpdate }) {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+  const { token } = useAuth();
 
   // Form states
   const [guestName, setGuestName] = useState('');
@@ -87,20 +89,7 @@ export default function EditReviewModal({ review, isOpen, onClose, onUpdate }) {
         created_at: review.created_at
       };
 
-      const response = await fetch(`${API_URL}/api/reviews/${review.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(putBody),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Failed to update the review.');
-      }
-
-      const updatedReview = await response.json();
+      const updatedReview = await updateReview(review.id, putBody, token);
       
       // Update state in page.js
       onUpdate(updatedReview);
