@@ -33,6 +33,64 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const isAuthRoute = pathname === '/login' || pathname === '/register';
+
+  if (isAuthRoute) {
+    return (
+      <nav className="fixed top-0 w-full z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex items-center">
+              <Link href="/" className="text-xl font-bold text-blue-700 dark:text-blue-500 tracking-tight">
+                GuestBook
+              </Link>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              {/* Theme Selector */}
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setIsThemeMenuOpen(!isThemeMenuOpen)}
+                  className="p-1.5 rounded-full border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center gap-2"
+                  aria-label="Select theme"
+                >
+                  {theme === 'light' ? (
+                    <span title="Light Mode">☀️</span>
+                  ) : (
+                    <span title="Dark Mode">🌙</span>
+                  )}
+                </button>
+
+                {isThemeMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 py-1 overflow-hidden animate-in fade-in zoom-in duration-100">
+                    <button
+                      onClick={() => { toggleTheme('light'); setIsThemeMenuOpen(false); }}
+                      className={`w-full text-left px-4 py-2 text-sm flex items-center gap-3 transition-colors ${theme === 'light'
+                          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-semibold'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                        }`}
+                    >
+                      <span>☀️</span> Light Mode
+                    </button>
+                    <button
+                      onClick={() => { toggleTheme('dark'); setIsThemeMenuOpen(false); }}
+                      className={`w-full text-left px-4 py-2 text-sm flex items-center gap-3 transition-colors ${theme === 'dark'
+                          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-semibold'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                        }`}
+                    >
+                      <span>🌙</span> Dark Mode
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    );
+  }
+
   return (
     <nav className="fixed top-0 w-full z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -217,4 +275,12 @@ export default function Navbar() {
       )}
     </nav>
   );
+}
+
+export function FooterWrapper({ children }) {
+  const pathname = usePathname();
+  const isAuthRoute = pathname === '/login' || pathname === '/register';
+
+  if (isAuthRoute) return null;
+  return <>{children}</>;
 }
