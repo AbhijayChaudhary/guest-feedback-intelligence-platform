@@ -5,6 +5,7 @@ import Modal from './ui/Modal';
 import { Button } from './ui';
 import { useAuth } from '@/context/AuthContext';
 import { updateReview } from '@/services/api';
+import { isValidGuestName } from '@/utils/validation';
 
 /**
  * EditReviewModal Component
@@ -44,8 +45,8 @@ export default function EditReviewModal({ review, isOpen, onClose, onUpdate }) {
     setErrorMessage('');
 
     // Validations
-    if (!guestName.trim()) {
-      setErrorMessage('Guest Name is required.');
+    if (!guestName.trim() || !isValidGuestName(guestName)) {
+      setErrorMessage('Please enter a valid guest name.');
       return;
     }
     if (!rating) {

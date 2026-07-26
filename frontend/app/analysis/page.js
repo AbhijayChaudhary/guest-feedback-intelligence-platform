@@ -6,6 +6,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { useAuth } from '@/context/AuthContext';
 import { analyzeReview, createReview, getNextReviewId } from '@/services/api';
 import AIAnalysisCard from '@/components/AIAnalysisCard';
+import { isValidGuestName } from '@/utils/validation';
 
 export default function CreateReviewPage() {
   const { token } = useAuth();
@@ -33,10 +34,34 @@ export default function CreateReviewPage() {
     setToastVisible(true);
   };
 
+  // Validate form fields consistently for both submission and AI analysis actions
+  const validateForm = () => {
+    if (!guestName.trim() || !isValidGuestName(guestName)) {
+      showToast('Please enter a valid guest name.', 'error');
+      return false;
+    }
+    if (!rating) {
+      showToast('Please select a rating.', 'error');
+      return false;
+    }
+    if (!category) {
+      showToast('Please select a category.', 'error');
+      return false;
+    }
+    if (!reviewText.trim()) {
+      showToast('Review text is required.', 'error');
+      return false;
+    }
+    if (reviewText.length > 1000) {
+      showToast('Review text cannot exceed 1000 characters.', 'error');
+      return false;
+    }
+    return true;
+  };
+
   // Handle AI analysis request
   const handleAnalyzeReview = async () => {
-    if (!reviewText.trim()) {
-      showToast('Review text is required for AI analysis.', 'error');
+    if (!validateForm()) {
       return;
     }
 
@@ -60,24 +85,7 @@ export default function CreateReviewPage() {
     e.preventDefault();
 
     // 1. Client-side validations
-    if (!guestName.trim()) {
-      showToast('Guest Name is required.', 'error');
-      return;
-    }
-    if (!rating) {
-      showToast('Please select a rating.', 'error');
-      return;
-    }
-    if (!category) {
-      showToast('Please select a category.', 'error');
-      return;
-    }
-    if (!reviewText.trim()) {
-      showToast('Review text is required.', 'error');
-      return;
-    }
-    if (reviewText.length > 1000) {
-      showToast('Review text cannot exceed 1000 characters.', 'error');
+    if (!validateForm()) {
       return;
     }
 
