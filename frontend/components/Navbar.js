@@ -101,7 +101,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center space-x-8 h-full">
+          <div className="hidden min-[850px]:flex items-center space-x-8 h-full">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -160,7 +160,7 @@ export default function Navbar() {
 
             {!loading && (
               isAuthenticated ? (
-                <div className="hidden md:flex items-center space-x-3">
+                <div className="hidden min-[850px]:flex items-center space-x-3">
                   <span className="hidden sm:inline text-xs font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-2.5 py-1.5 rounded-lg">
                     Hello, {user?.name}
                   </span>
@@ -175,7 +175,7 @@ export default function Navbar() {
                   </button>
                 </div>
               ) : (
-                <div className="hidden md:flex items-center space-x-3">
+                <div className="hidden min-[850px]:flex items-center space-x-3">
                   <Link
                     href="/login"
                     className="text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors px-2 py-1.5"
@@ -193,7 +193,7 @@ export default function Navbar() {
             )}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 text-gray-600 dark:text-gray-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none transition-colors"
+              className="min-[850px]:hidden p-2 text-gray-600 dark:text-gray-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none transition-colors"
               aria-label="Toggle mobile menu"
             >
               {isMobileMenuOpen ? (
@@ -212,7 +212,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Panel */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 transition-colors duration-300 animate-in slide-in-from-top duration-150">
+        <div className="min-[850px]:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 transition-colors duration-300 animate-in slide-in-from-top duration-150">
           <div className="px-4 pt-2 pb-4 space-y-2">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
