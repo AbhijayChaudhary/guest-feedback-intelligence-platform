@@ -12,6 +12,22 @@ The platform stores guest reviews in a MongoDB database and presents them throug
 
 ---
 
+# Live Demo
+
+### Frontend (Vercel)
+
+https://guestbook-review.vercel.app
+
+### Backend API (Render)
+
+https://guestbook-fpyp.onrender.com
+
+### API Documentation (Swagger)
+
+https://guestbook-fpyp.onrender.com/docs
+
+---
+
 # Key Features
 
 - AI-powered review analysis using Google Gemini
@@ -48,32 +64,29 @@ Workflow:
 
 # Tech Stack
 
-## Frontend
+| Layer | Technologies |
+|--------|--------------|
+| Frontend | Next.js, React.js, Tailwind CSS |
+| Backend | FastAPI, Python, Pydantic |
+| Database | MongoDB Atlas, PyMongo |
+| Authentication | JWT Authentication, Google OAuth (NextAuth.js) |
+| AI | Google Gemini 3.5 Flash API |
+| Deployment | Vercel (Frontend), Render (Backend) |
+| Version Control | Git, GitHub |
 
-- Next.js
-- React.js
-- Tailwind CSS
+---
 
-## Backend
+# Deployment Architecture
 
-- FastAPI
-- Python
-- Pydantic
+GuestBook is deployed as a cloud-based full-stack application.
 
-## Database
+- **Frontend:** Hosted on Vercel
+- **Backend API:** Hosted on Render
+- **Database:** MongoDB Atlas
+- **AI Service:** Google Gemini API
+- **Authentication:** JWT Authentication and Google OAuth
 
-- MongoDB Atlas
-- PyMongo
-
-## AI Integration 
-
-- Google Gemini API
-- Structured JSON output
-- Sentiment Analysis
-- Theme Detection
-- Review Summarization
-- Professional Response Generation
-- Sarcasm Detection
+The frontend communicates with the FastAPI backend through REST APIs. The backend stores review data in MongoDB Atlas and interacts with the Gemini API to perform AI-powered review analysis.
 
 ---
 
@@ -324,6 +337,17 @@ GuestBook/
 ├── PROMPTS.md
 └── README.md
 ```
+
+---
+
+# Known Limitations (Free Tier)
+
+The current deployment uses free cloud services for educational purposes.
+
+- Render free-tier services may enter sleep mode after periods of inactivity. The first request may therefore take approximately 30–60 seconds while the backend wakes up.
+- AI analysis depends on the availability and quota limits of the Google Gemini API.
+- MongoDB Atlas free-tier storage and resource limits may affect scalability for large datasets.
+- GuestBook currently supports manual review submission and does not yet integrate directly with external review platforms.
 
 ---
 
